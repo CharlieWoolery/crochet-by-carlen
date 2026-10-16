@@ -67,9 +67,9 @@ Data model
 
 Money is stored as integer cents. Never floats.
 
-collections — id, name, slug, description, opens_at (nullable), closes_at (nullable), status (draft / live / archived)
-products — id, collection_id, name, slug, description, price_cents, materials, dimensions (nullable), pattern_credit, pattern_credit_url (nullable), lead_time (text, nullable), order_cap (nullable), status (draft / live / archived), created_at
-product_images — id, product_id, storage_key, url_small, url_medium, url_large, width, height, focal_x (default 50), focal_y (default 50), alt_text, sort_order
+collections — id, name, slug, description (nullable), opens_at (nullable), closes_at (nullable), status (draft / live / archived)
+products — id, collection_id, name, slug, description, price_cents, materials, dimensions (nullable), pattern_credit (nullable — some items have none, e.g. Scrubby or her own designs), pattern_credit_url (nullable), lead_time (text, nullable), order_cap (nullable), status (draft / live / archived), created_at
+product_images — id, product_id, storage_key, url_small, url_medium, url_large, width, height, focal_x (default 50), focal_y (default 50), alt_text (nullable — falls back to product name), sort_order
 variants — id, product_id, name (e.g. "Blue", "Cotton"), option_type (color / material), swatch_hex (nullable), image_id (nullable — main photo switches when selected), price_cents (nullable override)
 orders — id, order_number (unique), customer_name, customer_email, customer_phone (nullable), source (website / instagram / facebook / other), fulfillment_method (ship / pickup / dropoff), address (nullable; required for ship and dropoff), subtotal_cents, fulfillment_fee_cents, total_cents, payment_status (unpaid / paid), payment_method (venmo / zelle / paypal / cash / other, nullable), paid_at (nullable), fulfillment_status (received → in_progress → shipped / ready_for_pickup / out_for_dropoff → delivered), notes, created_at
 order_items — id, order_id, product_id, variant_id (nullable), quantity, unit_price_cents (snapshot at order time)

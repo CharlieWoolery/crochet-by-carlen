@@ -3,12 +3,16 @@ from __future__ import annotations
 import enum
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, Enum, String, Text, func
+from sqlalchemy import DateTime, Enum, String, Text
 from sqlalchemy import Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
+
+if TYPE_CHECKING:
+    from .product import Product
 
 
 class CollectionStatus(str, enum.Enum):

@@ -3,12 +3,18 @@ from __future__ import annotations
 import enum
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, Enum, ForeignKey, Integer, String, Text, func
 from sqlalchemy import Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
+
+if TYPE_CHECKING:
+    from .collection import Collection
+    from .product_image import ProductImage
+    from .variant import Variant
 
 
 class ProductStatus(str, enum.Enum):
@@ -29,12 +35,11 @@ class Product(Base):
     )
     name: Mapped[str] = mapped_column(String, nullable=False)
     slug: Mapped[str] = mapped_column(String, nullable=False, unique=True, index=True)
-    description: Mapped[str | None] = mapped_column(Text)
+    description: Mapped[str] = mapped_column(Text, nullable=False)
     # Money stored as integer cents — never floats
     price_cents: Mapped[int] = mapped_column(Integer, nullable=False)
-    materials: Mapped[str | None] = mapped_column(Text)
+    materials: Mapped[str] = mapped_column(Text, nullable=False)
     dimensions: Mapped[str | None] = mapped_column(Text)
-    # Nullable: original designs have no pattern credit
     pattern_credit: Mapped[str | None] = mapped_column(Text)
     pattern_credit_url: Mapped[str | None] = mapped_column(Text)
     lead_time: Mapped[str | None] = mapped_column(Text)

@@ -2,12 +2,17 @@ from __future__ import annotations
 
 import enum
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Enum, ForeignKey, Integer, String
 from sqlalchemy import Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
+
+if TYPE_CHECKING:
+    from .product import Product
+    from .product_image import ProductImage
 
 
 class OptionType(str, enum.Enum):
