@@ -11,7 +11,7 @@ Backend	Python, FastAPI
 ORM / migrations	SQLAlchemy 2.0 + Alembic
 Database	PostgreSQL (hosted: Neon)
 Image processing	Pillow + pillow-heif, output WebP
-Image storage	Object storage (Cloudflare R2 or Supabase Storage — TBD). DB stores URLs only
+Image storage	Neon Object Storage (public bucket), accessed through the standard S3 API with boto3. Endpoint, bucket, and credentials come from env vars so the provider can be swapped (e.g. to Cloudflare R2) without code changes. DB stores URLs only
 Payments	Phase 1: customer pays owner directly (Venmo / Zelle / PayPal). Phase 2: PayPal Checkout + webhooks
 Hosting	TBD
 Domain	crochetbycarlen.com (Squarespace Domains)

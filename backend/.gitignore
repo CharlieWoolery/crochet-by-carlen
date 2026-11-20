@@ -4,3 +4,5 @@ __pycache__/
 *.pyo
 venv/
 .venv/
+test_photo.*
+upload_test.py
