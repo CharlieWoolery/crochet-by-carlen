@@ -1,13 +1,16 @@
 from __future__ import annotations
 
+import bcrypt
 import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app import auth
+from app.auth import SESSION_COOKIE
 from app.database import get_db
 from app.main import app
+from app.models.admin import AdminUser
 from app.models.base import Base
 
 
@@ -44,3 +47,22 @@ def reset_rate_limiter():
     auth._login_attempts.clear()
     yield
     auth._login_attempts.clear()
+
+
+@pytest_asyncio.fixture
+async def auth_headers(client, db_engine):
+    """
+    Create an AdminUser, log in, and return a Cookie header dict.
+    Use this in tests that need an authenticated request.
+    """
+    email = "admin@test.com"
+    password = "testpass"
+    SessionLocal = async_sessionmaker(db_engine, expire_on_commit=False)
+    async with SessionLocal() as db:
+        hash_ = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+        db.add(AdminUser(email=email, password_hash=hash_))
+        await db.commit()
+
+    resp = await client.post("/admin/login", json={"email": email, "password": password})
+    token = resp.cookies[SESSION_COOKIE]
+    return {"Cookie": f"{SESSION_COOKIE}={token}"}
