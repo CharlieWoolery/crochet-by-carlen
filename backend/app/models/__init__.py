@@ -4,6 +4,7 @@ from .collection import Collection, CollectionStatus
 from .order import OrderItem
 from .product import Product, ProductStatus
 from .product_image import ProductImage
+from .settings import Settings
 from .variant import OptionType, Variant
 
 __all__ = [
@@ -17,5 +18,6 @@ __all__ = [
     "Product",
     "ProductImage",
     "ProductStatus",
+    "Settings",
     "Variant",
 ]
