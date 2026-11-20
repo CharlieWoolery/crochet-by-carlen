@@ -1,4 +1,6 @@
+aiosqlite==0.21.0
 alembic==1.20.0
+bcrypt==4.3.0
 boto3==1.43.114
 botocore==1.43.114
 annotated-doc==0.0.5
@@ -7,6 +9,7 @@ anyio==4.15.1
 click==8.5.0
 fastapi==0.143.2
 h11==0.16.0
+httpx==0.28.1
 idna==3.20
 iniconfig==2.3.1
 jmespath==1.1.0
@@ -19,6 +22,7 @@ packaging==26.3
 pluggy==1.7.0
 pygments==2.21.0
 pytest==9.1.1
+pytest-asyncio==0.26.0
 python-dateutil==2.9.0.post0
 psycopg==3.3.6
 psycopg-binary==3.3.6
