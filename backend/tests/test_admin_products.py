@@ -297,10 +297,22 @@ class TestDeleteProduct:
     async def test_409_when_product_has_orders(self, client, auth_headers, db_engine):
         c = await _make_collection(db_engine)
         p = await _make_product(db_engine, c.id)
-        # Attach a stub order item directly
+        # Attach an order item directly (requires a parent Order row now)
+        from app.models.order import FulfillmentMethod, Order
         SessionLocal = async_sessionmaker(db_engine, expire_on_commit=False)
         async with SessionLocal() as db:
-            db.add(OrderItem(order_id=uuid.uuid4(), product_id=p.id))
+            order = Order(
+                order_number="CBC-9999",
+                customer_name="Test",
+                customer_email="t@t.com",
+                fulfillment_method=FulfillmentMethod.pickup,
+                subtotal_cents=0,
+                fulfillment_fee_cents=0,
+                total_cents=0,
+            )
+            db.add(order)
+            await db.flush()
+            db.add(OrderItem(order_id=order.id, product_id=p.id, quantity=1, unit_price_cents=0))
             await db.commit()
 
         resp = await client.delete(f"/admin/products/{p.id}", headers=auth_headers)

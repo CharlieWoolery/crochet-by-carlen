@@ -19,7 +19,7 @@ from app.models.variant import OptionType, Variant
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc).replace(tzinfo=None)
+    return datetime.now(timezone.utc)
 
 
 async def _make_collection(db_engine, **kwargs) -> Collection:

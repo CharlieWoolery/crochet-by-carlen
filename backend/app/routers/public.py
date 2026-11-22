@@ -73,9 +73,7 @@ class PublicCollectionOut(BaseModel):
 
 
 def _utcnow() -> datetime:
-    # Return timezone-naive UTC so comparisons work against naive datetimes
-    # stored by SQLite in tests; PostgreSQL accepts naive datetimes as UTC.
-    return datetime.now(timezone.utc).replace(tzinfo=None)
+    return datetime.now(timezone.utc)
 
 
 @router.get("/collections", response_model=list[PublicCollectionOut])
