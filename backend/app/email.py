@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, field
+import uuid
+from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,42 @@ class OrderConfirmationData:
     venmo_handle: str | None
     zelle_contact: str | None
     paypal_link: str | None
+
+
+@dataclass
+class CustomRequestNotificationData:
+    request_id: uuid.UUID
+    customer_name: str
+    customer_email: str
+    description: str
+    reference_image_url: str | None
+    # Destination — from settings.contact_email; may be None if not configured
+    owner_email: str | None
+
+
+async def send_custom_request_notification(data: CustomRequestNotificationData) -> None:
+    """
+    Notify the owner that a new custom request has arrived.
+
+    Currently logs to the console. Replace the body of this function with a
+    real email provider at deploy time — the interface is stable.
+    """
+    logger.info(
+        "\n"
+        "=== NEW CUSTOM REQUEST (console stub — wire up email provider before deploy) ===\n"
+        "To:          %s\n"
+        "From:        %s <%s>\n"
+        "Request ID:  %s\n"
+        "Description: %s\n"
+        "Ref image:   %s\n"
+        "=============================================================================",
+        data.owner_email or "owner (no contact_email configured)",
+        data.customer_name,
+        data.customer_email,
+        data.request_id,
+        data.description,
+        data.reference_image_url or "none",
+    )
 
 
 async def send_order_confirmation(data: OrderConfirmationData) -> None:

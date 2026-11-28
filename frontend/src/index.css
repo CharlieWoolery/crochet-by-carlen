@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-ink font-sans antialiased;
+  }
+
+  /* h1–h3 use the display/script font; h4+ use the body font */
+  h1, h2, h3 {
+    @apply font-display;
+  }
+}

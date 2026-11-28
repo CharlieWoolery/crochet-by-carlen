@@ -13,6 +13,7 @@ from sqlalchemy.orm import selectinload
 from ..database import get_db
 from ..models.collection import Collection, CollectionStatus
 from ..models.product import Product, ProductStatus
+from ..models.settings import Settings
 from ..models.variant import OptionType
 
 router = APIRouter(tags=["public"])
@@ -147,3 +148,25 @@ async def get_product(slug: str, db: AsyncSession = Depends(get_db)) -> Product:
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
     return product
+
+
+class PublicSettingsOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    # Only non-sensitive fields are exposed publicly.
+    # Payment handles, fees, and pickup_address live in admin-only responses.
+    instagram_url: str | None
+    facebook_url: str | None
+    tiktok_url: str | None
+    contact_email: str | None
+
+
+@router.get("/settings/public", response_model=PublicSettingsOut)
+async def get_public_settings(db: AsyncSession = Depends(get_db)) -> Settings:
+    result = await db.execute(select(Settings).where(Settings.id == 1))
+    settings = result.scalar_one_or_none()
+    if settings is None:
+        # Return empty settings rather than 404 so the footer renders cleanly
+        # before the owner has filled in her social links.
+        return Settings()
+    return settings

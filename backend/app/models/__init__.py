@@ -1,6 +1,7 @@
 from .admin import AdminSession, AdminUser
 from .base import Base
 from .collection import Collection, CollectionStatus
+from .custom_request import CustomRequest, CustomRequestStatus
 from .order import (
     FulfillmentMethod,
     FulfillmentStatus,
@@ -21,6 +22,8 @@ __all__ = [
     "Base",
     "Collection",
     "CollectionStatus",
+    "CustomRequest",
+    "CustomRequestStatus",
     "FulfillmentMethod",
     "FulfillmentStatus",
     "OptionType",

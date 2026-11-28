@@ -17,12 +17,11 @@ Hosting	TBD
 Domain	crochetbycarlen.com (Squarespace Domains)
 Branding
 
-Keep the owner's existing look:
-
-Logo: "Crochet by Carlen" in pink script inside a purple circle, with a purple yarn ball and crochet hook, and a small purple heart
-Palette: pink (logo script), purple (circle, yarn ball), whitewashed wood / off-white, warm wood tones
-Product photos are natural light: outdoor field/wood table shots and indoor shots in front of the logo sign
-Need a digital logo file from the owner (don't crop it from a photo)
+Logo: frontend/public/logo.png. It's a watercolor dusty-rose yarn ball with a crochet hook, a rose heart outline, black thin script "Crochet by Carlen," and "Estd 2023."
+Palette taken from the logo: dusty rose (main brand color), soft blush (light backgrounds and borders), near-black (text and script), warm tan (small accents, from the hook). Pure white page background so the logo blends in.
+Minimalist: lots of white space, clean sans-serif body font, a thin script font only for headings that echo the logo. Her product photos are the main visual.
+Gerbera daisies and Texas wildflowers as a light, recurring motif: simple original thin line-art SVGs (a gerbera daisy, a few wildflower stems) in dusty rose or tan, used as small accents in section dividers, the footer, and empty states. Never cluttered. Drawn as original SVGs; don't use stock or clip art.
+Natural and soft, not glossy. Her photos are shot outdoors in grassy fields and on wood tables.
 Core business rules
 Made to order. No inventory counts. Items are made after the order is placed.
 Collections / seasons. Products belong to collections (e.g. "Fall 2026") with optional open/close dates. Items can only be ordered while their collection is open.
@@ -184,3 +183,30 @@ Keep changes small and reviewable. One feature per change.
 Write tests for business rules (order window validation, caps, server-side totals incl. fulfillment fee, address required for ship/dropoff, order number uniqueness, pickup address never in public responses, EXIF stripped from processed images).
 Secrets (DB URL, storage keys, email API keys) live in environment variables, never in code.
 Track real usage metrics from launch (orders by source, orders processed, revenue handled, products listed, image payload size before/after processing) for the portfolio write-up.
+Frontend
+Stack: Vite 6 + React 19 + TypeScript, React Router v7, TanStack Query v5, Tailwind CSS v3.
+
+Dev proxy: vite.config.ts forwards /api/* to http://127.0.0.1:8000. No CORS config needed; cookies work because requests hit the same origin from the browser's point of view.
+
+Backend /api prefix: all FastAPI routers are mounted with prefix="/api" in main.py, so routes are /api/collections, /api/admin/login, etc. The /health endpoint stays at the root (not /api/health) for infra use.
+
+Tailwind theme (tailwind.config.js):
+  Colors — brand (dusty rose, #C4818A, full 50–900 scale), blush (#F9E9EA, light backgrounds/borders), ink (#1A1817, near-black text), tan (#B59A6E, warm accent)
+  Fonts — font-sans: Nunito (body); font-display: Cormorant Garamond italic (headings h1–h3)
+  Both fonts loaded from Google Fonts in index.html.
+
+SVG motifs (src/assets/):
+  GerberaDaisy.tsx — original 16-petal thin line-art daisy using currentColor
+  Wildflowers.tsx — original three 5-petal wildflowers on curved stems using currentColor
+  Used in section dividers, footer, and empty states. Never in product imagery.
+
+Directory layout:
+  src/pages/        — one file per page route
+  src/components/layout/  — Header.tsx, Footer.tsx
+  src/assets/       — SVG components
+  src/lib/api.ts    — apiFetch() wrapper (credentials: include, /api base, throws ApiError)
+
+Header: sticky, logo left, nav right (Shop · Past Work · Custom Requests · About).
+Footer: wildflower accent, social links + email fetched from GET /api/settings/public (non-sensitive fields only).
+Logo: frontend/public/logo.png — place the owner's file here. Used large on Home hero and About. Small in the header.
+Favicon: frontend/public/favicon.png — crop the yarn ball from the logo.

@@ -20,6 +20,19 @@ from app.models.admin import AdminUser
 from app.models.base import Base
 
 # ---------------------------------------------------------------------------
+# Test client that automatically prepends /api to every path.
+# This keeps the prefix in one place instead of every test call.
+# ---------------------------------------------------------------------------
+
+
+class _ApiClient(AsyncClient):
+    async def request(self, method: str, url, **kw):  # type: ignore[override]
+        if isinstance(url, str) and url.startswith("/"):
+            url = f"/api{url}"
+        return await super().request(method, url, **kw)
+
+
+# ---------------------------------------------------------------------------
 # Safety guard — checked at collection time, before any fixture runs.
 # ---------------------------------------------------------------------------
 
@@ -116,7 +129,7 @@ async def client(db_engine):
             yield session
 
     app.dependency_overrides[get_db] = override_get_db
-    async with AsyncClient(
+    async with _ApiClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as ac:
         yield ac
